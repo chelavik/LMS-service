@@ -10,6 +10,8 @@ test:
   script:
     - ./gradlew test --info
   artifacts:
+    reports:
+      junit: build/test-results/test/TEST-*.xml
     paths:
       - build/test-results/
       - build/reports/
