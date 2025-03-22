@@ -37,11 +37,10 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User update(long id, User user) {
-        if (!users.containsKey(id)) {
+        User existingUser = users.get(id);
+        if (existingUser == null) {
             throw new IllegalArgumentException("User with id=" + id + " not found");
         }
-
-        User existingUser = users.get(id);
         if (user.getLogin() != null) {
             existingUser.setLogin(user.getLogin());
         }

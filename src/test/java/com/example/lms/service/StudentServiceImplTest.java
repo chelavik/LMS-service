@@ -9,6 +9,7 @@ import com.example.lms.model.Student;
 import com.example.lms.repository.course.CourseRepository;
 import com.example.lms.repository.problem.ProblemRepository;
 import com.example.lms.repository.student.StudentRepository;
+import com.example.lms.repository.user.UserRepository;
 import com.example.lms.service.student.StudentServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,6 +35,9 @@ class StudentServiceImplTest {
 
     @Mock
     private ProblemRepository problemRepository;
+
+    @Mock
+    private UserRepository userRepository;
 
     @InjectMocks
     private StudentServiceImpl studentService;
