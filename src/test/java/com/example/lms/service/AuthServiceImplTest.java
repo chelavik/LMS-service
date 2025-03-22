@@ -1,12 +1,8 @@
 package com.example.lms.service;
 
-import com.example.lms.dto.StudentDto;
 import com.example.lms.dto.UserDto;
 import com.example.lms.exceptions.UnauthorizedException;
-import com.example.lms.mapper.StudentMapper;
-import com.example.lms.model.Student;
 import com.example.lms.model.User;
-import com.example.lms.repository.student.StudentRepository;
 import com.example.lms.repository.user.UserRepository;
 import com.example.lms.service.auth.AuthServiceImpl;
 
@@ -18,7 +14,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,14 +29,11 @@ class AuthServiceImplTest {
     @Mock
     private UserRepository userRepository;
 
-    @Mock
-    private StudentRepository studentRepository;
 
     @InjectMocks
     private AuthServiceImpl authService;
 
     private User user;
-    private Student student;
 
     @BeforeEach
     void setUp() {
@@ -51,7 +43,6 @@ class AuthServiceImplTest {
         user.setPassword("testPassword");
         user.setRole(User.Role.STUDENT);
 
-        student = StudentMapper.toModel(new StudentDto(null, "testUser", "temporaryName", "temporarySurname", null, new ArrayList<>()));
     }
 
     @Test
@@ -120,7 +111,6 @@ class AuthServiceImplTest {
 
         when(userRepository.findByLogin(login)).thenReturn(Optional.empty());
         when(userRepository.create(any(User.class))).thenReturn(newUser);
-        when(studentRepository.create(any(Student.class))).thenReturn(student);
 
         UserDto result = authService.signIn(login, role);
 
@@ -130,7 +120,6 @@ class AuthServiceImplTest {
 
         verify(userRepository, times(1)).findByLogin(login);
         verify(userRepository, times(1)).create(any(User.class));
-        verify(studentRepository, times(1)).create(any(Student.class));
     }
 
     @Test
@@ -143,7 +132,6 @@ class AuthServiceImplTest {
         assertThrows(IllegalArgumentException.class, () -> authService.signIn(login, role));
 
         verify(userRepository, never()).create(any(User.class));
-        verify(studentRepository, never()).create(any(Student.class));
     }
 
 }

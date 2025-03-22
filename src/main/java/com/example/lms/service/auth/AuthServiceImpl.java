@@ -8,14 +8,10 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.example.lms.dto.StudentDto;
 import com.example.lms.dto.UserDto;
 import com.example.lms.exceptions.UnauthorizedException;
-import com.example.lms.mapper.StudentMapper;
 import com.example.lms.mapper.UserMapper;
-import com.example.lms.model.Student;
 import com.example.lms.model.User;
-import com.example.lms.repository.student.StudentRepository;
 import com.example.lms.repository.user.UserRepository;
 import lombok.AllArgsConstructor;
 
@@ -23,7 +19,6 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private UserRepository userRepository;
-    private StudentRepository studentRepository;
 
     @Override
     public UserDto authenticate(String authHeader) {
@@ -66,11 +61,6 @@ public class AuthServiceImpl implements AuthService {
         user.setLogin(login);
         user.setPassword(password);
         user.setRole(role);
-        
-        if (role == User.Role.STUDENT) {
-            Student model = StudentMapper.toModel(new StudentDto(null, login, "temporaryName", "temporarySurname", null, new ArrayList<>()));
-            studentRepository.create(model);
-        }
 
         User savedUser = userRepository.create(user);
 
