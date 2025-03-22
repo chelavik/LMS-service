@@ -38,6 +38,9 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User update(long id, User user) {
         User existingUser = users.get(id);
+        if (existingUser == null) {
+            throw new IllegalArgumentException("User with id=" + id + " not found");
+        }
         if (user.getLogin() != null) {
             existingUser.setLogin(user.getLogin());
         }
