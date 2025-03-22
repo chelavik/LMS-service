@@ -8,6 +8,8 @@ import com.example.lms.model.Student;
 import com.example.lms.repository.course.CourseRepository;
 import com.example.lms.repository.problem.ProblemRepository;
 import com.example.lms.repository.student.StudentRepository;
+import com.example.lms.repository.user.UserRepository;
+
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,7 @@ public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
     private final ProblemRepository problemRepository;
     private final CourseRepository courseRepository;
+    private final UserRepository userRepository;
 
     @Override
     public StudentDto registerStudent(StudentDto studentDto) {
@@ -59,6 +62,8 @@ public class StudentServiceImpl implements StudentService {
             course.getStudents().remove(id);
             courseRepository.update(course.getId(), course);
         }
+        
+        userRepository.delete(id);
         studentRepository.delete(id);
     }
 }

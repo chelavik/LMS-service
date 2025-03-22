@@ -26,7 +26,6 @@ public class StudentDto {
     @NotEmpty
     private String lastName;
 
-    @NotEmpty
     private String phoneNumber;
 
     @Valid
