@@ -7,6 +7,7 @@ import com.example.lms.model.User;
 import com.example.lms.service.auth.AuthService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,16 +26,25 @@ public class AuthController {
     }
     
     @PostMapping("/signIn")
-    public ResponseEntity<UserDto> signIn(@RequestParam String login, @RequestParam User.Role role) {
+    public ResponseEntity<UserDto> signIn(@RequestHeader("Authorization") String authHeader, @RequestParam String login, @RequestParam User.Role role) {
+        if (login.isEmpty()) {
+            throw new HttpStatusException(HttpStatus.BAD_REQUEST, "Login and role must not be null");
+        }
+        
         try {
+            UserDto currentUser = authService.authenticate(authHeader);
+            authService.checkAdminAccess(currentUser);
+            
             UserDto user = authService.signIn(login, role);
             return ResponseEntity.ok(user);
         } catch (IllegalArgumentException e) {
             throw new HttpStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        } 
+        } catch (UnauthorizedException e) {
+            throw new HttpStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 
-    @GetMapping("/authenticate")
+
     public ResponseEntity<UserDto> authenticate(@RequestHeader("Authorization") String authHeader) {
         try {
             UserDto user = authService.authenticate(authHeader);

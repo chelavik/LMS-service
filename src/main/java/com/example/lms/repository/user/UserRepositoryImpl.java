@@ -9,8 +9,8 @@ import java.util.*;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
-    private final Map<Long, User> users = new HashMap<>();
-    private final Map<String, User> usersByLogin = new HashMap<>();
+    private final Map<Long, User> users = new HashMap<>(Map.of(1L, new User(1L, "admin", "admin", Role.ADMIN)));
+    private final Map<String, User> usersByLogin = new HashMap<>(Map.of("admin", new User(1L, "admin", "admin", Role.ADMIN)));
     private long nextId = 1;
 
     @Override
@@ -66,9 +66,6 @@ public class UserRepositoryImpl implements UserRepository {
         User user = users.get(id);
         users.remove(id);
         usersByLogin.remove(user.getLogin());
-        if (user.getRole() == Role.STUDENT) {
-
-        }  
     }
 
     @Override
